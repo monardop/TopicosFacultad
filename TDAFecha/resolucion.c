@@ -85,3 +85,7 @@ tFecha ingresar_fecha()
     return fecha;
 }
 
+tFecha fecha_nueva(int dias_relativos)
+{
+
+}
