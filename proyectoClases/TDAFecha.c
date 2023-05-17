@@ -47,16 +47,16 @@ int fecha_valida(const tFecha *f)
     }
 
     return 1;
-} 
+}
 
 void dias_relativos(tFecha *f)
 {
-    int diff_year, dd_aaaa_completos, dias_anio; 
+    int diff_year, dd_aaaa_completos, dias_anio;
 
     diff_year = f->year - FECHA_INICIO;
-    dd_aaaa_completos = diff_year * 365 
-                        + diff_year / 4 
-                        - diff_year / 100 
+    dd_aaaa_completos = diff_year * 365
+                        + diff_year / 4
+                        - diff_year / 100
                         - diff_year / 400;
 
     if(es_bisiesto(f->year) == 1)
@@ -81,11 +81,81 @@ tFecha ingresar_fecha()
         scanf("%d/%d/%d", &fecha.day, &fecha.month, &fecha.year);
     } while (fecha_valida(&fecha) == 0);
     dias_relativos(&fecha);
-    
+
     return fecha;
 }
 
-tFecha fecha_nueva(int dias_relativos)
+int restar_fechas(const tFecha fecha1, const tFecha fecha2)
 {
+    int dias = fecha1.diasRel - fecha2.diasRel;
+    return (dias > 0)? dias:-dias;
+}
 
+tFecha sumar_dias(int dias, const tFecha f)
+{
+    int day = f.day, month = f.month, year = f.year, bisiesto;
+    tFecha nueva;
+
+    // acomodo el año
+    while(dias >= 365)
+    {
+        if(es_bisiesto(year) == 1){
+            dias -= 366;
+        } else{
+            dias -= 365;
+        }
+        year++;
+    }
+    bisiesto = es_bisiesto(year);
+
+    if(bisiesto == 1)
+    {
+        while(dias > *(dias_bisiesto + month)){
+            dias -= *(dias_bisiesto + month);
+            month++;
+            if(month > 12){
+                month = 1;
+                year++;
+            }
+        }
+        day += dias;
+        if(day > *(dias_bisiesto + month)){
+            day -= *(dias_bisiesto + month);
+            month++;
+            if(month > 12){
+                month=1;
+                year++;
+            }
+        }
+    } else{
+        while(dias > *(dias_normal + month)){
+            dias -= *(dias_normal + month);
+            month++;
+            if(month > 12){
+                month = 1;
+                year++;
+            }
+        }
+        day += dias;
+        if(day > *(dias_normal + month)){
+            day -= *(dias_normal + month);
+            month++;
+            if(month > 12){
+                month=1;
+                year++;
+            }
+        }
+    }
+
+    nueva.day = day;
+    nueva.month = month;
+    nueva.year = year;
+
+    printf("La nueva fecha es: %d/%d/%d \n", day, month, year);
+
+    return nueva;
+}
+
+void imprimir_fecha(const tFecha *f){
+    printf("%d/%d/%d \n", f->day,f->month, f->year);
 }
