@@ -4,13 +4,13 @@
 #define PI 3.141592
 #define EULER 2.71828
 
-double pow(double, int);
+double potencia(double, int);
 unsigned int factorial(unsigned int);
 double seno(float);
 double coseno(float);
-double tan(float);
+double tangente(float);
 double potenciaEuler(int);
 float calcularRaizCuadrada(float);
-double abs(double);
+double modulo(double);
 
 #endif // MATEMATICAS_H_INCLUDED
