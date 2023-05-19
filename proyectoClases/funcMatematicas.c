@@ -35,7 +35,7 @@ double potencia(const double base, int potencia){
     }
 
     // Si no salto lo anterior, calculo.
-    for(int i = potencia; i > 0; i--){
+    for(int i = potencia; i > 1; i--){
         resultado *= base;
     }
     return resultado;
