@@ -1,13 +1,16 @@
+#define EPSILON 0.00001 // Presición deseada
+
 float calcularRaizCuadrada(float num) {
     if (num == 0.0 || num == 1.0) {
         return num;
     }
 
     float resultado = num;
-    float epsilon = 0.00001;  // Precisión deseada
+    float temp;
+
     while (1) {
-        float temp = 0.5 * (resultado + num / resultado);
-        if (temp - resultado < epsilon && resultado - temp < epsilon) {
+        temp = 0.5 * (resultado + num / resultado);
+        if (temp - resultado < EPSILON && resultado - temp < EPSILON) {
             break;
         }
         resultado = temp;
@@ -55,4 +58,70 @@ double abs(double x){
     }
 }
 
-/* */
+// Para cos, sen y e^x usaré series de taylor
+double seno(float x){
+    double respuesta = 0, temp;
+    int grado = 1, boolSuma = 1;
+    
+    while(1){
+        temp = pow(x, grado) / factorial(grado);
+        if(temp > EPSILON){
+           if(boolSuma == 1)
+           {
+                respuesta += temp; 
+                boolSuma = 0;
+           } else{
+                respuesta -= temp;
+                boolSuma = 1;
+           }
+        }else{
+            return respuesta;
+        }
+        grado += 2;
+    }
+}
+
+double coseno(float x){
+    double respuesta = 0, temp;
+    int grado = 0, boolSuma = 1;
+    while(1){
+        temp = pow(x, grado) / factorial(grado);
+        if(temp > EPSILON){
+           if(boolSuma == 1)
+           {
+                respuesta += temp; 
+                boolSuma = 0;
+           } else{
+                respuesta -= temp;
+                boolSuma = 1;
+           }
+        }else{
+            return respuesta;
+        }
+        grado += 2;
+    }
+}
+
+double tan(float x){
+    if(x == 90){
+        return;
+    }
+    
+    double respuesta = seno(x)/coseno(x);
+    return respuesta;
+}
+
+double potenciaEuler(int x){
+    double respuesta = 1, temp;
+    int i = 1;
+    while(1){
+        temp = pow(x,i)/factorial(i);
+        if(temp > EPSILON){
+            respuesta += temp;
+        }else{
+            break;
+        }
+        i++;
+    }
+    return respuesta;
+}
