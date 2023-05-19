@@ -19,23 +19,9 @@ float calcularRaizCuadrada(float num) {
     return resultado;
 }
 
-double potencia(const double base, int potencia){
-    double resultado = base;
-    // Casos especiales
-    if(potencia == 0 && base != 0){
-        return 1;
-    }
-
-    if(base == 0 || base == 1){
-        return base;
-    }
-
-    if(base == 0 && base == 0){
-        return -1;
-    }
-
-    // Si no salto lo anterior, calculo.
-    for(int i = potencia; i > 1; i--){
+double potencia(const double base, int exponente){
+    double resultado = 1.0;
+    for (int i = 0; i < exponente; i++) {
         resultado *= base;
     }
     return resultado;
@@ -43,12 +29,8 @@ double potencia(const double base, int potencia){
 
 unsigned int factorial(unsigned int base){
     unsigned int resultado = 1;
-    
-    if(base == 0 || base == 1){
-        return 1;
-    }
-    
-    for(int i = base; i > 1; i--){
+
+    for (int i = 1; i <= base; i++) {
         resultado *= i;
     }
     return resultado;
@@ -65,68 +47,49 @@ double modulo(double x){
 
 // Para cos, sen y e^x usaré series de taylor
 double seno(float x){
-    double respuesta = 0, temp;
-    int grado = 1, boolSuma = 1;
-    
-    while(1){
-        temp = potencia(x, grado) / factorial(grado);
-        if(temp > EPSILON){
-           if(boolSuma == 1)
-           {
-                respuesta += temp; 
-                boolSuma = 0;
-           } else{
-                respuesta -= temp;
-                boolSuma = 1;
-           }
-        }else{
-            return respuesta;
-        }
-        grado += 2;
+    double resultado = 0.0;
+    int terminos = 30;  // Número de términos en la serie de Taylor
+
+    for (int i = 0; i < terminos; i++) {
+        int n = 2 * i + 1;
+        double signo = (i % 2 == 0) ? 1.0 : -1.0;
+        double termino = (signo * potencia(x, n)) / factorial(n);
+        resultado += termino;
     }
+
+    return resultado;
 }
 
 double coseno(float x){
-    double respuesta = 0, temp;
-    int grado = 0, boolSuma = 1;
-    while(1){
-        temp = potencia(x, grado) / factorial(grado);
-        if(temp > EPSILON){
-           if(boolSuma == 1)
-           {
-                respuesta += temp; 
-                boolSuma = 0;
-           } else{
-                respuesta -= temp;
-                boolSuma = 1;
-           }
-        }else{
-            return respuesta;
-        }
-        grado += 2;
+    double resultado = 0.0;
+    int terminos = 30;  // Número de términos en la serie de Taylor
+
+    for (int i = 0; i < terminos; i++) {
+        int n = 2 * i;
+        double signo = (i % 2 == 0) ? 1.0 : -1.0;
+        double termino = (signo * potencia(x, n)) / factorial(n);
+        resultado += termino;
     }
+
+    return resultado;
 }
 
 double tangente(float x){
     if(x == 90){
         return x;
     }
-    
+
     double respuesta = seno(x)/coseno(x);
     return respuesta;
 }
 
 double potenciaEuler(int x){
-    double respuesta = 1, temp;
-    int i = 1;
-    while(1){
-        temp = potencia(x,i)/factorial(i);
-        if(temp > EPSILON){
-            respuesta += temp;
-        }else{
-            break;
-        }
-        i++;
+    double resultado = 1.0;
+    int terminos = 10;  // Número de términos en la serie de Taylor (puedes ajustarlo para mayor precisión)
+
+    for (int i = 1; i <= terminos; i++) {
+        resultado += potencia(x, i) / factorial(i);
     }
-    return respuesta;
+
+    return resultado;
 }
