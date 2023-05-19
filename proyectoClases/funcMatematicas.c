@@ -19,20 +19,24 @@ float calcularRaizCuadrada(float num) {
     return resultado;
 }
 
-double pow(const double base, int potencia){
+double potencia(const double base, int potencia){
     double resultado = base;
     // Casos especiales
-    if(potencia == 0 && base != 0)
+    if(potencia == 0 && base != 0){
         return 1;
+    }
 
-    if(base == 0 || base == 1)
+    if(base == 0 || base == 1){
         return base;
+    }
 
-    if(base == 0 && base == 0)
+    if(base == 0 && base == 0){
         return -1;
+    }
+
     // Si no salto lo anterior, calculo.
-    for(potencia; potencia > 0; potencia--){
-        resultado += base;
+    for(int i = potencia; i > 0; i--){
+        resultado *= base;
     }
     return resultado;
 }
@@ -40,16 +44,17 @@ double pow(const double base, int potencia){
 unsigned int factorial(unsigned int base){
     unsigned int resultado = 1;
     
-    if(base == 0 || base == 1)
+    if(base == 0 || base == 1){
         return 1;
+    }
     
-    for(base; base > 0; base--){
-        resultado *= base;
+    for(int i = base; i > 1; i--){
+        resultado *= i;
     }
     return resultado;
 }
 
-double abs(double x){
+double modulo(double x){
     if(x < 0){
         return x;
     }
@@ -64,7 +69,7 @@ double seno(float x){
     int grado = 1, boolSuma = 1;
     
     while(1){
-        temp = pow(x, grado) / factorial(grado);
+        temp = potencia(x, grado) / factorial(grado);
         if(temp > EPSILON){
            if(boolSuma == 1)
            {
@@ -85,7 +90,7 @@ double coseno(float x){
     double respuesta = 0, temp;
     int grado = 0, boolSuma = 1;
     while(1){
-        temp = pow(x, grado) / factorial(grado);
+        temp = potencia(x, grado) / factorial(grado);
         if(temp > EPSILON){
            if(boolSuma == 1)
            {
@@ -102,9 +107,9 @@ double coseno(float x){
     }
 }
 
-double tan(float x){
+double tangente(float x){
     if(x == 90){
-        return;
+        return x;
     }
     
     double respuesta = seno(x)/coseno(x);
@@ -115,7 +120,7 @@ double potenciaEuler(int x){
     double respuesta = 1, temp;
     int i = 1;
     while(1){
-        temp = pow(x,i)/factorial(i);
+        temp = potencia(x,i)/factorial(i);
         if(temp > EPSILON){
             respuesta += temp;
         }else{
