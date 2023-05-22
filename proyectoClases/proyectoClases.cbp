@@ -35,9 +35,17 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="fecha.h" />
+		<Unit filename="funcMatematicas.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="funcionesGenericas.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="matematicas.h" />
+		<Unit filename="utilidades.h" />
 		<Unit filename="vector.c">
 			<Option compilerVar="CC" />
 		</Unit>
