@@ -1,47 +1,46 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "vector.h"
 
-void intercambio(void* a, void* b)
+void mapear(void* arr, size_t nroElementos, size_t tamElemento, void(*func)(void*))
 {
-    void* punteroAux = a;
-    
-    a = b;
-    b = punteroAux;
-}
-
-void borrarElemento(void* arreglo, const int ce, const int tamElemento){
-
-    // Mover los elementos siguientes una posición hacia atrás
-    for (int i = 0; i < ce - 1; i++) {
-        arreglo = arreglo + (i * tamElemento);
-    }
-}
-
-void mapear(void* arr, int nroElementos, int tamElemento, int(*func)(void*))
-{
-    for(int i = 0; i < nroElementos; i++)
+    void* elementoActual;
+    for (size_t i = 0; i < nroElementos; i++)
     {
-        if(func(arr+(i*tamElemento)) == 1)
-            return;
-    }
+        elementoActual = (char*)arr + (i*tamElemento);
+        func(elementoActual);
+    } 
 }
 
-void filtrar(void* arr, int nroElementos, const int tamElementos, const void* parametro , cmp comparador)
-{
-    // si cmp da 1 significa que cumple el criterio. De lo contrario hay cambio.
-    int i = 0;  
-    while(i < nroElementos)
-    {
-        if(comparador(arr, parametro) == 0){
-            borrarElemento(arr,nroElementos, tamElementos);
-            nroElementos--;
+void filtrar(void* arr, size_t nroElem, size_t tamElemento, int(*func)(const void*)) {
+    int indiceFiltrado = 0;
+    void *elementoFiltrado, *elemento;
+    // Recorrer el vector y filtrar los elementos
+    for (size_t i = 0; i < nroElem; i++) {
+        elemento = (char*)arr + i * tamElemento;
+
+        if (func(elemento)) {
+            // Mantener el elemento en el arr
+            if (i != indiceFiltrado) {
+                // Si el elemento no está en la posición correcta, moverlo
+                elementoFiltrado = (char*)arr + indiceFiltrado * tamElemento;
+                memcpy(elementoFiltrado, elemento, tamElemento);
+            }
+
+            indiceFiltrado++;
         }
-        i++;
-        arr += tamElementos;
     }
+    printf("Se filtro %d elementos.\n", indiceFiltrado);
 }
-void* reducir(void* arr, int nroElementos, int tamElementos, void(*func)(void*), void* elem){
-    
+
+void reducir(void* arr, size_t nroElementos, size_t tamElemento, void*(*func)(const void*, void*), void* acumulador){
+    void* elementoActual;
+
+    for (size_t i = 0; i < nroElementos; i++)
+    {
+        elementoActual = (char*)arr + (i*tamElemento);
+        func(elementoActual, acumulador);
+    }
 }
 
 void* busquedaBinaria(const void* arr, size_t nroElementos, size_t tamElemento, const void* objetivo, cmp comparador) {
@@ -69,10 +68,10 @@ void* busquedaBinaria(const void* arr, size_t nroElementos, size_t tamElemento, 
     return NULL;
 }
 
-void insertarOrdenado(void *arr, int nroElementos, int tamElementos){
+void insertarOrdenado(void *arr, size_t nroElementos, size_t tamElementos, void* elementoInsertar){
 }
-void ordenarBurbujeo(void *arr, int nroElementos, int tamElementos){
+void ordenarBurbujeo(void *arr, size_t nroElementos, size_t tamElementos){
 }
-void quickSort(void *arr, int nroElementos, int tamElementos, void* elem, void* max, void* min){
+void quickSort(void *arr, size_t nroElementos, size_t tamElementos, void* elem, void* max, void* min){
 }
 
