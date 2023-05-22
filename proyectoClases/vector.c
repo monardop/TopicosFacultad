@@ -68,10 +68,35 @@ void* busquedaBinaria(const void* arr, size_t nroElementos, size_t tamElemento, 
     return NULL;
 }
 
-void insertarOrdenado(void *arr, size_t nroElementos, size_t tamElementos, void* elementoInsertar){
+void agregarElementoOrdenado(void* vector, size_t* nroElementos, size_t tamElemento, size_t topeMax, const void* elemento, cmp comparador) {
+    if (*nroElementos >= topeMax) {
+        printf("Error: El vector está completo.\n");
+        return;
+    }
+    void *destino, *origen;
+
+    // Encontrar la posición de inserción
+    size_t posicion = 0;
+    while (posicion < *nroElementos && comparador((const char*)vector + posicion * tamElemento, elemento) < 0) {
+        posicion++;
+    }
+
+    // Desplazar los elementos a la derecha para hacer espacio
+    for (size_t i = *nroElementos; i > posicion; i--) {
+        destino = (char*)vector + i * tamElemento;
+        origen = (char*)vector + (i - 1) * tamElemento;
+        memcpy(destino, origen, tamElemento);
+    }
+
+    // Copiar el elemento en la posición de inserción
+    destino = (char*)vector + (posicion * tamElemento);
+    memcpy(destino, elemento, tamElemento);
 }
+
 void ordenarBurbujeo(void *arr, size_t nroElementos, size_t tamElementos){
+
 }
+
 void quickSort(void *arr, size_t nroElementos, size_t tamElementos, void* elem, void* max, void* min){
 }
 

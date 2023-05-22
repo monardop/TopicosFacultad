@@ -3,12 +3,12 @@
 
 typedef int (*cmp)(const void*, const void*);
 
-void mapear(void* arr, const int nroElementos, const int tamElementos, int(*func)(void*));
-void filtrar(void* arr, int nroElementos, const int tamElementos, void*, cmp comparador);
-void* reducir(void* arr, int nroElementos, const int tamElementos, void(*func)(void*));
-void* busquedaBinaria(const void* arr, size_t nroElementos, size_t tamElemento, const void* objetivo, cmp comparador);
-void insertarOrdenado(void *arr, int nroElementos, const int tamElementos);
-void ordenarBurbujeo(void *arr, int nroElementos, const int tamElementos);
-void quickSort(void *arr, int nroElementos, const int tamElementos, void* elem, void* max, void* min);
+void mapear(void*, const int , const  , int(*func)(void*));
+void filtrar(void* , size_t , size_t , int(*func)(const void*));
+void* reducir(void*, int , const int , void(*func)(void*));
+void* busquedaBinaria(const void*, size_t , size_t , const void* , cmp );
+void insertarOrdenado(void* , int , const int );
+void ordenarBurbujeo(void* , int , const int );
+void quickSort(void*, int , const  , void* , void* , void* );
 
 #endif // VECTOR_H_INCLUDED
