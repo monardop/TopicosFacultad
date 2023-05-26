@@ -2,6 +2,22 @@
 #include <stdlib.h>
 #include "vector.h"
 
+void memcpyPropia(void *dest, const void *src, size_t n){
+    char *csrc = (char *)src;
+    char *cdest = (char *)dest;
+
+    for (size_t i = 0; i < n; i++){
+        cdest[i] = csrc[i];
+    }
+}
+
+void intercambiar(void* dest, void* src, size_t bytes){
+    void* aux = malloc(bytes);
+    memcpyPropia(aux, src, bytes);
+    memcpyPropia(src, dest, bytes);
+    memcpyPropia(dest, aux, bytes);
+}
+
 void mapear(void* arr, size_t nroElementos, size_t tamElemento, void(*func)(void*))
 {
     void* elementoActual;
@@ -9,7 +25,7 @@ void mapear(void* arr, size_t nroElementos, size_t tamElemento, void(*func)(void
     {
         elementoActual = (char*)arr + (i*tamElemento);
         func(elementoActual);
-    } 
+    }
 }
 
 void filtrar(void* arr, size_t nroElem, size_t tamElemento, int(*func)(const void*)) {
@@ -24,7 +40,7 @@ void filtrar(void* arr, size_t nroElem, size_t tamElemento, int(*func)(const voi
             if (i != indiceFiltrado) {
                 // Si el elemento no está en la posición correcta, moverlo
                 elementoFiltrado = (char*)arr + indiceFiltrado * tamElemento;
-                memcpy(elementoFiltrado, elemento, tamElemento);
+                memcpyPropia(elementoFiltrado, elemento, tamElemento);
             }
 
             indiceFiltrado++;
@@ -85,18 +101,41 @@ void agregarElementoOrdenado(void* vector, size_t* nroElementos, size_t tamEleme
     for (size_t i = *nroElementos; i > posicion; i--) {
         destino = (char*)vector + i * tamElemento;
         origen = (char*)vector + (i - 1) * tamElemento;
-        memcpy(destino, origen, tamElemento);
+        memcpyPropia(destino, origen, tamElemento);
     }
 
     // Copiar el elemento en la posición de inserción
     destino = (char*)vector + (posicion * tamElemento);
-    memcpy(destino, elemento, tamElemento);
+    memcpyPropia(destino, elemento, tamElemento);
 }
 
-void ordenarBurbujeo(void *arr, size_t nroElementos, size_t tamElementos){
-
+void ordenarBurbujeo(void *vector, size_t nroElementos, size_t tamElemento, cmp cmp){
+    void* elemActual, *elemSiguiente;
+    for(size_t i = 0; i < nroElementos; i++){
+        for(size_t j = 0; j < nroElementos - 1; j++){
+            elemActual = (char*)vector + (tamElemento * j);
+            elemSiguiente = (char*)vector + (tamElemento * j) + 1;
+            if(cmp(elemActual, elemSiguiente) != 0){
+                intercambiar(elemActual, elemSiguiente, tamElemento);
+            }
+        }
+    }
 }
 
-void quickSort(void *arr, size_t nroElementos, size_t tamElementos, void* elem, void* max, void* min){
+void quickSort(void *vector, size_t tamElementos, int izquierda, int derecha, cmp cmp){
+    if(izquierda<derecha){
+        void* pivot = (char*)vector + derecha*tamElementos;
+        int i = izquierda - 1;
+        for(int j = izquierda; j < derecha; j++){
+            void* current = (char*)vector + j* tamElementos;
+            if(cmp(current, pivot) < 0){
+                i++;
+                intercambiar((char*)vector + (i*tamElementos), current, tamElementos);
+            }
+            intercambiar((char*)vector + (i+1) * tamElementos, pivot, tamElementos);
+            quickSort(vector, izquierda, i, tamElementos, cmp);
+            quickSort(vector, i + 2, derecha, tamElementos, cmp);
+        }
+    }
 }
 
