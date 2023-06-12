@@ -56,3 +56,38 @@ def crear_archivos():
 
 crear_archivos()
 agregar_registros()
+
+# Ahora los ordeno
+def ordenar_lineas(lineas):
+    lineas.sort(key=lambda x: (x[1], x[2], x[0]))  # Ordenar por Apellido, Nombre, DNI
+    return lineas
+
+def leer_archivo(nombre_archivo):
+    lineas = []
+    with open(nombre_archivo, 'r') as archivo:
+        for linea in archivo:
+            linea = linea.strip()
+            if linea:
+                dni = int(linea[:10])
+                apellido = linea[10:30].strip()
+                nombre = linea[30:50].strip()
+                valor = float(linea[50:])
+                lineas.append((dni, apellido, nombre, valor))
+    return lineas
+
+def escribir_archivo(lineas, nombre_archivo):
+    with open(nombre_archivo, 'w') as archivo:
+        for linea in lineas:
+            archivo.write(f"{linea[0]:<10}{linea[1]:<20}{linea[2]:<20}{linea[3]:.2f}\n")
+
+# Leer y ordenar el primer archivo
+archivo1 = "empleados_promedio.txt"
+lineas1 = leer_archivo(archivo1)
+lineas1 = ordenar_lineas(lineas1)
+escribir_archivo(lineas1, archivo1)
+
+# Leer y ordenar el segundo archivo
+archivo2 = "empleados_sueldo.txt"
+lineas2 = leer_archivo(archivo2)
+lineas2 = ordenar_lineas(lineas2)
+escribir_archivo(lineas2, archivo2)
