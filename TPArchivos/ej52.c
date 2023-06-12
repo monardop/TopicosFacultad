@@ -11,7 +11,7 @@ count the total number of words, and determine the length of the longest word.
 */
 
 #define MAXLEN 100
-void lector(const char* string);
+void lector(char* string);
 void limpiarstr(char*);
 
 int main(){
@@ -19,9 +19,8 @@ int main(){
 
     // printf("Inserte palabras separadas por un punto:\n");
     // fgets(string, sizeof(string), stdin);
-    
+
     limpiarstr(string);
-    printf("%s\n", string);
     lector(string);
 
     return 0;
@@ -34,10 +33,8 @@ void limpiarstr(char* str){
             *str = '\0';
             break;
         }
-        printf("%c - %d\t", *str, i);
         str++;
         i++;
-        printf("\n");
     }
     if(i == 99){
         *str = '\0';
@@ -45,7 +42,7 @@ void limpiarstr(char* str){
 }
 
 int buscarFinPalabra(char* string){
-    int contador = 1;
+    int contador = 0;
     while(*string){
         if(*string == '.'){
             break;
@@ -53,33 +50,33 @@ int buscarFinPalabra(char* string){
         contador++;
         string++;
     }
-
+    if(contador == 0)
+        return 1;
     return contador;
 }
 
-void lector(const char* string){
+void lector(char* string){
     int contadorPalabras = 1, maxLongitud, repeticionPrimera = 0;
     char primeraPalabra[MAXLEN];
     char* punteroPalabras = string;
-    printf("%p\n", punteroPalabras);
+    
     maxLongitud = buscarFinPalabra(punteroPalabras);
-    strncpy(primeraPalabra, string, maxLongitud-1);
-    punteroPalabras += (maxLongitud-1);
-
+    strncpy(primeraPalabra, string, maxLongitud);
+    punteroPalabras += maxLongitud;
     while(*punteroPalabras){
-        printf("%p  ", punteroPalabras);
-        int nuevaPalabra = buscarFinPalabra(punteroPalabras);
-        if(nuevaPalabra > maxLongitud){
-            maxLongitud = nuevaPalabra;
+        int nuevaLongitud = buscarFinPalabra(punteroPalabras);
+        if(nuevaLongitud > maxLongitud){
+            maxLongitud = nuevaLongitud;
         }
-
-        if(strncmp(primeraPalabra, punteroPalabras, nuevaPalabra) == 0){
+        if(strncmp(primeraPalabra, punteroPalabras, nuevaLongitud) == 0){
             repeticionPrimera++;
         }
-        contadorPalabras++;
-        punteroPalabras += nuevaPalabra;
+        if(*punteroPalabras != '.'){
+            contadorPalabras++;
+        }
+        punteroPalabras += nuevaLongitud;
     }
-
+    
     printf("\n");
     printf("-Primer palabra: %s\n-Cant palabras: %d\n-Repeticion primer palabra: %d", primeraPalabra, contadorPalabras, repeticionPrimera);
     printf("\n-La long maxima es de %d", maxLongitud);
